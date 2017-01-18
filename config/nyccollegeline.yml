@@ -1,0 +1,36 @@
+defaults: &defaults
+  aws_access_key_id: "AKIAJ5NVMZUQFLGQDSVA"
+  aws_secret_access_key: "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"
+  email_prefix: "[ nyccollegeline.org ] "
+  host: "nyccollegeline.org"
+  mail_bcc: "amitkumar@mobikasa.com"
+  mail_sender: "NYC College Line <no-reply@nyccollegeline.org>"
+  mail_recipient: "no-reply@nyccollegeline.org"
+  error_mail_recipient: "amitkumar@mobikasa.com"
+  s3_bucket: "gradnyc"
+  s3_host: "http://gradnyc.s3.amazonaws.com"
+  recaptcha_pubkey: "6LepdgkUAAAAAMCO1ncRqaTzqNWCcCA2tzt1rcfR"
+  recaptcha_secret: "6LepdgkUAAAAAA_FsA6bZ6cbtrGiaGyw7uthp7_d"
+
+development:
+  <<: *defaults
+  mail_recipient: "amitkumar@mobikasa.com"
+  host: "http://localhost:3000"
+  img_host: "http://localhost:3000"
+
+stage:
+  <<: *defaults
+  email_prefix: "[stage.nyccollegeline.org] "
+  host: "stage.nyccollegeline.org"
+  img_host: "http://blenderbox:coffee42@stage.nyccollegeline.org"
+  mail_bcc: "amitkumar@mobikasa.com"
+  mail_recipient: "amitkumar@mobikasa.com"
+  s3_bucket: "gradnyc-stage"
+  s3_host: "http://gradnyc-stage.s3.amazonaws.com"
+
+production:
+  <<: *defaults
+
+test:
+  <<: *defaults
+  mail_recipient: "amitkumar@mobikasa.com"

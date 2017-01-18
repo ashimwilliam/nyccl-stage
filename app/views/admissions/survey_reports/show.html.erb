@@ -1,0 +1,28 @@
+<% title "Survey Reports" %>
+<div class="controls">
+  
+</div>
+
+<div class="pagination-info">
+  
+</div>
+<% unless @survey_answers.empty? %>
+  <table class="index-list">
+  <%# questions = @survey_answers.pluck(:survey_question_id).uniq %>
+  <% @survey_questions.each_with_index do |ques, ind| %>
+   
+         <td>Question<%= ind+1 %>.&nbsp&nbsp<%=link_to ques.question_title %></td>
+    </tr>
+    <tr>
+      <td>
+        <% answers = @survey_answers.where(survey_question_id: ques) %>
+        <% answers.each do |answer| %>
+          Answer.&nbsp&nbsp <%= answer.answer %><br>
+        <% end %>
+      </td>
+    </tr>    
+  <% end %>    
+  </table>
+<% else %>
+  <p>There is no response submitted to this survey</p>
+<% end %>  

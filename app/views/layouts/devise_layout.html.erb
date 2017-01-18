@@ -1,0 +1,117 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+<%= render 'shared/head' %>
+<%= yield :more_head %>
+</head>
+<body<%= yield :body_id %><%= yield :body_class %>>
+
+  <%#= render 'shared/header' %>
+  <%= render 'shared/new_header' %>
+  <%#= render 'shared/search_form' %>
+  <div id="content" class="clearfix">
+    <%if @alert_msg %>
+      <% if @alert_msg == 'alert' %><p class="message alert"><%= 'It seems that the login password is not correct. You will receive an email with instructions about how to reset your password in a few minutes. Please reset the password and try logging in again.' %></p><% end %>
+      <% if @alert_msg == 'notice' %><p class="message notice"><%= "Your password was changed successfully. You are now signed." %></p><% end %>
+    <% else %>
+      <% if notice %><p class="message notice"><%= notice %></p><% end %>
+      <% if alert %><p class="message alert"><%= alert.html_safe %></p><% end %>
+    <% end %>
+    <header id="content-top" class="clearfix">
+      <%= yield :header %>
+    </header>
+    <article class="col-2">
+      <%= yield %>
+    </article>
+    <aside class="col-1">
+      <%= yield :aside %>
+    </aside>
+  </div>
+
+  <% 
+    about = Page.where(:permalink => 'about').first 
+    help = Page.where(:permalink => 'help').first
+  %>
+
+  <footer>
+    <div class="container-fluid" id="footer">
+      <div id="topfooter" class="row">
+        <div class="container">
+          <div class="ftrcol about lg">
+            <h3><a href="/about">About NYC College Line</a></h3>
+            <div class="desc">
+              NYC College Line will help you stay organized from exploration to graduation. The site was created by Graduate NYC!, CUNY, NYC DOE, and Goddard Riverside. <%= link_to 'More...', page_path(about) unless about.blank? %>
+            </div>
+          </div>
+          <div class="ftrcol contact sm">
+            <h3>Contact </h3>
+            <div class="desc">
+              <strong>16 Court Street<br/> Brooklyn, NY<br/><a href="mailto:info@nyccollegeline.org">info@nyccollegeline.org</a></strong>
+              <a href="http://www.facebook.com/NYCCollegeLine" class="socialicon"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>
+              <a href="https://twitter.com/NYCCollegeLine" class="socialicon"><i class="fa fa-twitter-square" aria-hidden="true"></i></a>
+              <a href="http://nyccollegeline.tumblr.com" class="socialicon"><i class="fa fa-tumblr-square" aria-hidden="true"></i></a>
+              <%= link_to '<i class="fa fa-bold" aria-hidden="true"></i>'.html_safe, blog_posts_path, class: 'socialicon' %>
+              <a href="<%= root_url %>feed?format=rss" class="socialicon"><i class="fa fa-rss" aria-hidden="true"></i></a>
+            </div>
+          </div>
+          <div class="ftrcol languages lg">
+            <h3>Languages </h3>
+            <div class="desc">
+              <div class="langleft">
+                <a href="/languages/bengali">Bengali</a>
+                <a href="/languages/espanol">Español</a>
+                <a href="/languages/francais">Français</a>
+                <a href="/languages/haitian-creole">Kreyòl Ayisyen</a>
+                <a href="/languages/urdu">اردو</a>
+              </div>
+              <div class="langryt">
+                <a href="/languages/russian">Pусский</a>
+                <a href="/languages/arabic">العربيّة</a>
+                <a href="/languages/korean">방문</a>
+                <a href="/languages/chinese">中文</a>
+              </div>
+            </div>
+          </div>
+          <div class="ftrcol more sm">
+            <h3>More</h3>
+            <div class="desc">
+              <a href="#" id="translate">Translate site</a>
+              <div id="google_translate_element"></div>
+              <a href="/glossary">Glossary</a>
+              <%= link_to 'Help', page_path(help) unless help.blank? %><br/><br/>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="midfooter" class="row">
+        <div class="container">
+          <div class="copyright">© Copyright 2016. All rights reserved.
+            <a href="/terms-of-use">Terms of Use</a> &amp; <a href="/privacy-policy">Privacy Policy</a>
+          </div>
+        </div>
+      </div>
+                 
+      <div id="bottomfooter" class="row">
+        <div class="container footerimg">
+          <div class="ftrlogo  col-sm-2 col-xs-6"><%=link_to image_tag("CUNY.jpg"), "http://www2.cuny.edu/" %></div>
+          <div class="ftrlogo col-sm-2 col-xs-6"><%=link_to image_tag("NYC.jpg"), "http://schools.nyc.gov/default.htm" %></div>
+          <div class="ftrlogo col-sm-4 col-xs-6"><%=link_to image_tag("graguate_nyc.jpg"), "http://www.graduatenyc.org/" %></div>
+          <div class="ftrlogo col-sm-4 col-xs-6"><%= link_to image_tag("goddard.jpg"), "http://www.goddard.org/grcc/?" %></div>
+        </div>
+      </div> 
+    </div>
+  </footer>
+<%= render 'shared/javascripts' %>
+<%= yield :js %>
+<%= render 'shared/toolbar' %>
+<!-- Begin: www.iperceptions.com -->
+<script type="text/javascript">
+  ;(function (w, d, s, l) { var r = 100, js, fjs = d.getElementsByTagName(s)[0], id = "IPerceptionsJS", a = "async", b = "defer",go = function() { if(d.getElementById(id)) { return; } js = d.createElement(s);js.src = w.location.protocol + "//ips-invite.iperceptions.com/webValidator.aspx?sdfc=6493690c-120224-d5814988-e0a7-49aa-8f34-59f3d2c80751&lID=1&source=91787"; js.id = id; js.type = "text/javascript"; js[a] = a; js[b] = b; fjs.parentNode.insertBefore(js, fjs); }; if(r < Math.floor(Math.random() * 100)) { d.cookie = "IPE_S_120224=0;Path=/;" } else if(!(/(^|;)\s*IPE(_S_)?120224=/.test(d.cookie))){ if (w.addEventListener) { w.addEventListener(l, go, false); } else if (w.attachEvent) { w.attachEvent("on" + l, go); } } })(window, document, "script", "load");
+</script>
+<!-- End: www.iperceptions.com -->
+</body>
+</html>

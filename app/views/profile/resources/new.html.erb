@@ -1,0 +1,15 @@
+<% title "Add a resource" %>
+
+<% content_for :body_id do %> id="profile"<% end %>
+<% content_for :body_class do %> class="centered"<% end %>
+
+<%= render "header" %>
+
+<div class="col-xs-12">
+      <span class="hint">Select the type of resource to add and fill out as many fields as you can. We’ll review and approve all additions before they get published, but please doublecheck for accuracy, spelling, and grammar.</span>
+    </div>
+<div role="tabpanel" class="tab-pane active" id="ladvisor">
+  <div class="col-xs-12">
+    <%= render "form", resource: @resource %>
+  </div>
+</div>    

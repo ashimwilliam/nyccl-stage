@@ -1,0 +1,8 @@
+<p>
+  <!--span class="handle"></span-->
+  <%#= f.label :order, class: "inline" %> <%#= f.text_field :order, class: 'micro order' %>
+  <%= f.select :survey_question_id,
+    options_from_collection_for_select(SurveyQuestion.all, :id, :question_title, f.object.survey_question_id),
+    {}, class: 'chosen', data: { url: admin_survey_questions_path } %>
+  <a href="#" class="edit-chosen">Edit</a> - <%= f.link_to_remove "Remove" %>
+</p>

@@ -1,0 +1,49 @@
+<% title "Comments" %>
+
+<div class="controls">
+  <%= link_to "export", admin_comments_path(format: 'csv'), class: 'button', title: 'export to csv' %>
+</div>
+
+<div class="pagination-info">
+  <%= page_entries_info @comments %>
+</div>
+
+<%= render 'shared/per_page' %>
+
+<%= will_paginate @comments, previous_label: '&lt; previous',
+      next_label: 'next &gt;' %>
+
+<table class="index-list" width="100%">
+  <tr>
+    <th width="10%"><%= sortable_header("users.username", "User") %></th>
+    <th width="44%">Comment</th>
+    <th width="15%">Commented on</th>
+    <th width="15%"><%= sortable_header("created_at", "Date", true) %></th>
+    <th width="16%"></th>
+  </tr>
+  <% @comments.each do |comment| %>
+  <% #if comment.user_id %>
+    <tr<%= cycle(""," class='alt'") %>>
+    <td width="10%" style="word-wrap: break-word;">
+      <% if comment.user_id %>
+        <%= link_to comment.user_username, edit_admin_comment_path(comment) %>
+      <% else %>
+        Anonymous
+      <% end %>  
+      </td>
+    <td width="44%"><%= comment.content %></td>
+    <td width="15%"><%= comment.commentable_type %> <%= comment.commentable_id %></td>
+    <td width="15%"><%= l comment.created_at %></td>
+    <td width="16%">
+      <span class="actions">
+      <%= commentable_link(comment) %>
+      <%= link_to 'edit', edit_admin_comment_path(comment) %> |
+      <%= link_to 'delete', confirm_destroy_admin_comment_path(comment) %></span>
+    </td>
+    </tr>
+  <% #end %>
+  <% end %>
+</table>
+
+<%= will_paginate @comments, previous_label: '&lt; previous',
+    next_label: 'next &gt;' %>

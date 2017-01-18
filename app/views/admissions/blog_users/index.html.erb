@@ -1,0 +1,41 @@
+<% title "Blog Users" %>
+
+<div class="controls">
+  <%= link_to "export", export_csv_admin_blog_users_path(format: 'csv'), class: 'button', title: 'export to csv' %>
+
+</div>
+
+
+<div class="pagination-info">
+  <%= page_entries_info @blog_users %>
+</div>
+
+<%= render 'shared/per_page' %>
+
+<%= will_paginate @blog_users, previous_label: '&lt; previous',
+      next_label: 'next &gt;' %>
+
+   
+
+<% if !@blog_users.blank? %>
+<table class="index-list">
+  <tr>
+    <th><%= sortable_header("Email", "") %></th>
+     <th><%= sortable_header("Created Date", "") %></th>
+    <th></th>
+
+  </tr>
+  <% @blog_users.each do |user| %>
+  <tr<%= cycle(""," class='alt'") %>>
+  <td><%= user.email %></td>
+  <td><%= l user.created_at, format: :short %></td>
+  <td>
+    <%= link_to 'delete', confirm_destroy_admin_blog_user_path(user) %></span>
+  </td>
+  </tr>
+  <% end %>
+</table>
+
+<%= will_paginate @blog_users, previous_label: '&lt; previous',
+    next_label: 'next &gt;' %>
+<% end %>    

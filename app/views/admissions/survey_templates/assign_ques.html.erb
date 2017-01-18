@@ -1,0 +1,21 @@
+<h2>Assign Questions to <%= @survey_template.title %> survey</h2>
+
+<p>Please tick the check to include in your survey : </p>
+<%= form_for @survey_template, url: assign_ques_admin_survey_template_path do |f| %>
+  <table class="index-list">
+ 
+      <% @questions.each do |question| %>
+        <tr>
+        <% survey_template_questions = @survey_template.survey_questions.pluck(:id) %>
+        <% if survey_template_questions.include?question.id %>
+          <td><input type="checkbox" name="<%=question.id%>" class='allchk' id="<%=question.id%>" checked /></td><td><%= question.question_title %></td>
+        <% else %>
+          <td><input type="checkbox" name="<%=question.id%>" class='allchk' id="<%=question.id%>" /></td><td><%= question.question_title %></td>
+        <% end %>
+          </tr>
+      <% end %> 
+
+  </table>  
+  <button class="action" type="submit">save</button>
+  <%= link_to "cancel", admin_survey_templates_path, class: 'button' %>
+<% end %>

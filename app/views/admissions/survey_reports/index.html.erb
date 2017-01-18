@@ -1,0 +1,43 @@
+<% title "Survey Reports" %>
+
+<div class="controls">
+  <%#= link_to "export", admin_events_path(format: 'csv'), class: 'button', title: 'export to csv' %>
+  <%#= link_to "add new", new_admin_survey_template_path, class: 'button', title: 'add new' %>
+</div>
+
+<div class="pagination-info" style="margin-top: 17px">
+  <%= page_entries_info @survey_templates %>
+</div>
+
+<div style="margin-top: 39px">
+  <%= render 'shared/per_page'%>
+</div>
+
+
+<%= will_paginate @survey_templates, previous_label: '&lt; previous',
+  next_label: 'next &gt;' %>
+
+<% if !@survey_templates.empty? %>
+  <table class="index-list" style="margin-top: 17px">
+    <tr>
+      <th><%= sortable_header("title", "") %></th>
+      <th></th>
+    </tr>
+    <% @survey_templates.each do |survey| %>
+      <tr<%= cycle(""," class='alt'") %>>
+        <td><%= survey.title %></td>
+
+        <td>
+          <span class="actions">
+            <%= link_to 'View Report', report_admin_survey_report_path(survey.secure_token) %> <%#= link_to "Delete",  confirm_destroy_admin_survey_report_path(survey) %>
+          </span>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+ 
+  <%= will_paginate @survey_templates, previous_label: '&lt; previous',
+    next_label: 'next &gt;' %>
+<% else %>
+  <p>There  is no result to display .</p>
+<% end %>  

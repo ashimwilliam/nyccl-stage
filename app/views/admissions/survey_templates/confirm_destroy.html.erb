@@ -1,0 +1,8 @@
+<% title "Delete #{@survey_template.title}"%>
+
+<%= form_for :survey_template, url: admin_survey_template_path(@survey_template.secure_token), html: { method: :delete } do |f| %>
+    <h3>Are you sure you want to permanently delete - <%= @survey_template.title %>?</h3>
+    <p>
+      <button type="submit">Delete</button> or <%= link_to "cancel", admin_survey_templates_path %>
+    </p>
+<% end %>

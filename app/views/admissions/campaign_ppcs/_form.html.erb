@@ -1,0 +1,225 @@
+<style type="text/css">
+  .field_with_errors {
+    display: inline-block;
+    float: right !important;
+    margin-right: 53% !important;
+    margin-top: -4% !important;
+  }
+
+  .field_with_errors input {
+    margin-left: 53% !important;
+  }
+
+
+</style>
+  <%= form_for [:admin, campaign_ppc] do |f| %>
+    <%= image_tag "/assets/25.gif", id: "gif", style: "float: right;  display: none;"  %>
+
+    <%= render 'shared/errors', m: campaign_ppc %>
+
+    <%= render 'admissions/shared/action_buttons',
+               m: campaign_ppc,
+               cancel_path: admin_campaign_ppcs_path,
+               view_path: campaign_ppc.new_record? ? nil : campaign_ppc_path(campaign_ppc),
+               delete_path: campaign_ppc.new_record? ? nil : confirm_destroy_admin_campaign_ppc_path(campaign_ppc) %>
+
+    <p><%= f.label :title %>
+      <%= f.text_field :title, required: true %> <span class="required">*</span></p>
+
+    <p>
+      <%= f.label :status_id %>
+      <%= f.select  :status_id,   Page::STATUSES %></p>
+    </p>  
+
+    <p>
+      <%= f.label :layout %>
+      <%= f.select  :layout, [['layout 1', 1],['layout 2', 2],['layout 3', 3], ['layout 4', 4], ['layout 5', 5]], prompt: "select layout"%></p>
+    </p>
+    
+    <p>
+      <%= f.label :body %>
+      <%= f.text_area :body, class: 'tinymce' %></p>
+
+    <p>
+      <%= f.label :meta_title %>
+      <%= f.text_field :meta_title %>
+    </p>
+    <p>
+      <%= f.label :meta_keywords %>
+      <%= f.text_field :meta_keywords %>
+    </p>
+    <p>
+      <%= f.label :meta_description %>
+      <%= f.text_area :meta_description %>
+    </p>  
+    <% unless campaign_ppc.image_uid.blank? %>
+    <p>
+      <%= f.label :existing_advertise_image %>      
+      <%= image_tag campaign_ppc.image.thumb('620x70#').url %></p>
+    <p>  
+      <%= f.label :remove_existing_image %>      
+
+       <%= check_box_tag "is_removed" %>
+    </p>
+    <% end %>  
+    <p class= 'upload_file'>
+      <%= f.label :new_advertise_image %>
+      <%= f.file_field :image %></p>
+    <p class="hint indent" id="preview" >*Image width should be between 850px to 1200px </p>
+      
+    <p>
+      <%= f.label :advertisement_image_link %>
+      <%= f.text_field :advertisement_image_link %>
+    </p>
+    <p>
+      <%= f.label :notification_emails_send_to %>
+      <%= f.text_field :contact_form_email %>
+    </p>    
+    <p>
+      <label for="blog_post_permalink" class="string required"><abbr title="required">*</abbr> Permalink</label>
+      <%= f.text_field :permalink %>
+      <p class="hint indent">*You should leave this blank and let the system generate one, unless validation fails.</p>      
+    </p>
+<% end %>
+
+<% content_for :js do %>
+ <script type="text/javascript">
+
+    $("#campaign_ppc_image").change(function () {
+      $(".upload_file > a").remove();
+      $('.upload_file').append('<a id="remove" href="javascript:;">remove</a>');
+    });
+
+    $('.upload_file').on('click', '#remove', function(e){
+      $("#campaign_ppc_image").val("");
+      $(".upload_file > a").remove();
+    });
+
+    
+    $('#campaign_ppc_layout').on('change', function() {
+      var layout = this.value;
+      if (layout > 3) {
+        $("#preview").text("*Image width should be between 400px to 700px")
+      } 
+      else {
+        $("#preview").text("*Image width should be between 850px to 1200px")
+      }
+    });
+
+    $(document).ready(function() {
+      var layout = $('#campaign_ppc_layout').val();
+      if (layout > 3) {
+        $("#preview").text("*Image width should be between 400px to 700px")
+      } 
+      else {
+        $("#preview").text("*Image width should be between 850px to 1200px")
+      }
+    });
+
+    
+
+    $("form").submit(function(e){
+      $('#gif').show(); 
+      var valid_form ;
+      var form = this ;
+      var imageUrl = $("#campaign_ppc_advertisement_image_link").val();
+      var layoutSelected = parseInt($('#campaign_ppc_layout').val());
+
+      var _URL = window.URL || window.webkitURL;
+      function displayPreview(files) {
+          var img = new Image();
+      
+          img.onload = function () {
+              var width=this.width,
+                  imgsrc=this.src;  
+                if( layoutSelected == 4 || layoutSelected == 5 ){
+                      if( width >= 400 && width <= 700){
+                        valid_form = true ;
+                      }    
+                    }
+                    else if(layoutSelected == 1 || layoutSelected == 2 || layoutSelected == 3)  {
+                      if( width >= 850 && width <= 1200){
+                        valid_form = true ;
+                      } 
+
+                    }
+          
+                    else {
+                      valid_form = false;
+                      return false;
+                    }   
+          };   
+
+        img.src = _URL.createObjectURL(files);
+      }  
+
+      function getMeta(url) {
+        var img = new Image();
+        img.src = url;
+        img.onload = function () {
+                    if( layoutSelected == 4 || layoutSelected == 5 ){
+                      if( this.width >= 400 && this.width <= 700){
+                        valid_form = true ;
+                      }    
+                    }
+                    else if(layoutSelected == 1 || layoutSelected == 2 || layoutSelected == 3)  {
+                      if( this.width >= 850 && this.width <= 1200){
+                        valid_form = true ;
+                      } 
+
+                    }
+          
+                    else {
+                      valid_form = false;
+                      return false;
+                    }                      
+        };
+      }
+ 
+      var file = $("#campaign_ppc_image")[0].files[0];
+
+      if (file != "") {
+        displayPreview(file);
+        e.preventDefault();
+         setTimeout(function() { 
+          if (valid_form == true) {
+            form.submit();
+          } 
+          else {
+            $('#gif').hide(); 
+            alert("Your Uploaded Image is not of defined size.");
+            $("#campaign_ppc_image").val("");
+            $(".upload_file > a").remove();
+            $(window).scrollTop(800);
+            e.preventDefault();
+          }
+
+        } , 2000);
+
+      }
+      
+      if (imageUrl != "") {
+        
+        getMeta(imageUrl);
+        e.preventDefault();
+
+        setTimeout(function() { 
+          if (valid_form == true) {
+            form.submit();
+          } 
+          else {
+            $('#gif').hide(); 
+            alert("Your Image Link is not of defined size.");
+            $("#campaign_ppc_advertisement_image_link").css('border', 'solid 1px red');
+            $(window).scrollTop(800);
+            e.preventDefault();
+          }
+
+        } , 2000);
+      }            
+
+    });
+  
+  </script>
+
+<% end %>  

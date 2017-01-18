@@ -1,0 +1,15 @@
+<% title "Edit #{@resource.name}" %>
+
+<% content_for :body_id do %> id="profile resources"<% end %>
+<% content_for :body_class do %> class="centered"<% end %>
+
+<%= render "header" %>
+<div class="col-xs-12">
+  <span class="hint">Your edits will be published as soon as you click submit. There’s no undo button, so check your work carefully.
+  </span>
+</div>
+<div role="tabpanel" class="tab-pane active" id="ladvisor">
+  <div class="col-xs-12">
+    <%= render "form", resource: @resource %>
+  </div>
+</div>  

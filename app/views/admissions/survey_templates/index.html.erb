@@ -1,0 +1,82 @@
+<% title "Survey Template" %>
+
+<div class="controls">
+  <%#= link_to "export", admin_events_path(format: 'csv'), class: 'button', title: 'export to csv' %>
+  <%= link_to "add new", new_admin_survey_template_path, class: 'button', title: 'add new' %>
+</div>
+
+<div class="pagination-info">
+  <%= page_entries_info @survey_templates %>
+</div>
+
+<%= render 'shared/per_page' %>
+
+<%= will_paginate @survey_templates, previous_label: '&lt; previous',
+      next_label: 'next &gt;' %>
+<p>
+  <label for="status_id">Status:</label> <%= select_tag :status_id, options_for_select(Page::STATUSES, @status_id), prompt: "Show all" %>   
+</p>
+
+<% if !@survey_templates.blank? %>
+  <table class="index-list">
+    <tr>
+      <th><%= sortable_header("title", "") %></th>
+      <th></th>
+    </tr>
+
+    <% @survey_templates.each do |survey| %>
+      <tr<%= cycle(""," class='alt'") %>>
+        <td><%= link_to survey.title, edit_admin_survey_template_path(survey.secure_token) %></td>
+
+        <td>
+          <span class="actions">
+            <%= link_to 'Assign Question', assign_ques_admin_survey_template_path(survey.secure_token) %> |
+            <%= link_to 'show', template_survey_template_path(survey.secure_token), target: :blank %> |
+            <%= link_to 'edit', edit_admin_survey_template_path(survey.secure_token) %> |
+            <%= link_to 'delete', confirm_destroy_admin_survey_template_path(survey.secure_token) %>
+          </span>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+
+  <%= will_paginate @survey_templates, previous_label: '&lt; previous',
+    next_label: 'next &gt;' %>
+<% else %>
+  <p>There  is no result to display .</p>
+<% end %>    
+
+<%= content_for :js do %>
+  <script>
+    (function () {
+        var app = {},
+            status = 'status_id',
+            type = 'type_id';
+        function init() {
+            $('#' + status).change(onFilterChange);
+            $('#' + type).change(onFilterChange);
+        }
+        function onFilterChange(e) {
+            var pairs = window.location.search.split('?').join('').split('&'),
+                keys = {},
+                pair;
+            for (var i = 0; i < pairs.length; ++i) {
+                pair = pairs[i].split('=');
+                keys[pair[0]] = pair[1];
+            }
+            keys[status] = $('#' + status).val();
+            keys[type] = $('#' + type).val();
+            window.location = window.location.pathname + '?' + serialize(keys);
+        }
+        function serialize(obj) {
+            var str = [];
+            for(var p in obj) {
+                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+            }
+            return str.join("&");
+        }
+        $(init);
+        return app;
+    }());
+  </script>
+<% end %>

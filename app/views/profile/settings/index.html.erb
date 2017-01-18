@@ -1,0 +1,136 @@
+<% title "My settings" %>
+
+<% content_for :body_id do %> id="profile"<% end %>
+<% content_for :body_class do %> class="settings centered"<% end %>
+
+<%= content_for :header_caption do %>Change your image, setting, and how often you get email. You’re the boss!<% end %>
+<%#=  render "profile/shared/nav" %>
+
+<%= render 'shared/errors', m: current_user %>
+<div role="tabpanel" id="lsetting">
+  <div class="col-xs-12">
+   
+    <%= nested_form_for current_user, url: profile_settings_path, html: { class: "newform profile", autocomplete: "off" } do |f| %>
+      <div class="row">
+        <%= render "profile/shared/avatar", f: f  %>          
+      </div>      
+      
+      <div class="row">
+        <div class="form-group col-sm-6 col-xs-12">
+          <label for="puser">Username</label>
+          <span class="hint">Your username shows up next to your comments and posts<br/>Please do not use your first and last name.</span>
+          <%= f.text_field :username, class: "form-control", placeholder: "username" %>
+        </div>
+   
+        <div class="form-group col-sm-6 col-xs-12">
+          <label for="pemail">Update your email:</label>
+          <span class="hint">After you click "Save," we will send you an email with a confirmation link.</span><br/>
+          <%= f.email_field :email, class: "form-control", placeholder: "email", type: "email", required: "required" %>
+        </div>
+        <span id="user_audience"> 
+        </span> 
+      </div>
+
+      <div class="row">
+        <div class="form-group col-sm-6 col-xs-12">
+          <label for="pzipcode">Update your ZIP CODE/POSTAL CODE and Mobile Phone</label>
+          <div class="row">
+            <div class="col-sm-6 col-xs-12 col-xs-12">
+              <%= f.text_field :zipcode, class: "form-control", placeholder: "zip code/postal code", required: "required" %>
+      
+            </div>
+            <div class="col-sm-6 col-xs-12 col-xs-12">
+              <%= f.text_field :phone, class: "form-control col-sm-3", placeholder: "Mobile Phone" %>
+            </div>
+          </div>
+             
+        </div>
+        <div class="form-group col-sm-6 col-xs-12">
+          <label for="pwd">UPDATE YOUR PASSWORD</label>
+          <div class="row">
+            <div class="col-sm-6 col-xs-12 col-xs-12">
+             <%= f.password_field :password, class: "form-control col-sm-3", placeholder: "password" %>
+      
+            </div>
+            <div class="col-sm-6 col-xs-12 col-xs-12">
+              <%= f.password_field :password_confirmation, class: "form-control col-sm-3", placeholder: "confirmation" %>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+
+        <div class="form-group col-sm-6 col-xs-12">
+          <%= render "profile/shared/audiences", f: f , audience: @audience %>
+        </div>
+
+        <div class="col-sm-6 col-xs-12">
+          <div class=" ">
+            <%= render "profile/shared/newsletters", f: f %> 
+          </div>
+          <br/>
+          <div class=" ">
+            <%= render "profile/shared/notifications", f: f %>
+          </div>
+        </div>
+      </div> 
+          
+            
+      <div class="col-sm-6 col-xs-12 col-sm-offset-6">
+        <button class="btn green large pull-right text-uppercase" type="submit">Save </button>
+        <% unless current_user.admin? %>
+          <a class="del btn" data-toggle="modal" data-target="#delaccount"><u>Delete your account</u></a>
+         <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= content_for :js do %>
+  <%= javascript_include_tag 'libs/plupload/plupload.full', 'app/profile' %>
+  <script type="text/javascript">
+    
+
+    $('form.newform').submit(function(e) {
+      var file_size = $('#custom_avatar')[0].files[0].size;
+      if (file_size > 500000) {
+        alert('Please upload an image of size less than 500 kB')
+        e.preventDefault();
+      }
+    });
+
+    $('form.edit_user').submit(function(e) {
+      var img_size = $('#user_custom_avatar')[0].files[0].size;
+      if (img_size > 500000) {
+        alert('Please upload an image of size less than 500 kB')
+        e.preventDefault();
+      }
+    });
+
+
+  </script>
+<% end %>
+
+<div class="modal fade" id="delaccount" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" aria-hidden="true">
+  <div class="modal-dialog">          
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+        <h4 class="modal-title" style="padding:0;">We hate to see you go!</h4>
+      </div>
+      <div class="modal-body">
+       
+        <p style="margin:0px;padding:0;">Are you sure you want to delete your account?</p>
+      </div>
+
+      <div class="modal-footer">
+        <%= form_for current_user, url: profile_settings_path, html: { method: :delete }, remote: true do |f| %>
+          <button class="btn red" type=>Delete</button>
+          <button type="button" class="btn green" data-dismiss="modal">Cancel</button>
+        <% end %>
+      </div>
+    </div>       
+  </div>
+</div>

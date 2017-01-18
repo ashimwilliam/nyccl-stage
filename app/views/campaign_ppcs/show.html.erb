@@ -1,0 +1,165 @@
+<style type="text/css">
+  .img-left {
+    padding-left: 0px;
+    height: 235px;
+    margin-bottom: 10px;
+  }
+
+  .img-right {
+    padding-right: 0px;
+    margin-bottom: 10px;
+  }
+
+  .img-layout {
+    height: 235px;
+  }
+
+
+  .blog-body {
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
+
+  @media only screen and (max-width: 769px) {
+    .img-right {
+        padding-right: 15px;
+    }
+    .img-left{
+padding-left: 15px;
+    }
+}
+
+</style>
+<% title @campaign_ppc.title %>
+<% if @campaign_ppc.layout == 2 %>
+
+  <% content_for :header do %>
+    <h2 class='title'><%= @campaign_ppc.title %></h2>
+  <% end %>
+
+  <h1><%= @campaign_ppc.title %></h1>
+  <div class= "img-layout">
+    <% if @campaign_ppc.image.present? %>
+      <%= image_tag @campaign_ppc.image.url, class: 'featured' %>
+    <% elsif @campaign_ppc.advertisement_image_link.present? %>
+      <%= image_tag @campaign_ppc.advertisement_image_link, class: 'featured' %>  
+    <% end %>  
+  </div>
+
+  <br>
+
+  <% unless @campaign_ppc.body.blank? %>
+      <div class="blog-body"><%= @campaign_ppc.body.html_safe %></div>
+  <% end %>
+
+  <div class="info" >
+    <%= render partial: 'shared/addthis' %>
+  </div>
+
+<% elsif @campaign_ppc.layout == 3 %>
+  <% content_for :header do %>
+    <h2 class='title'><%= @campaign_ppc.title %></h2>
+  <% end %>
+
+  <% if @campaign_ppc.image.present? %>
+    <%= image_tag @campaign_ppc.image.url, class: 'featured',  style: "margin-top: 10px;"  %>
+  <% elsif @campaign_ppc.advertisement_image_link.present? %>
+    <%= image_tag @campaign_ppc.advertisement_image_link, class: 'featured',  style: "margin-top: 10px;"  %>
+  <% end %>
+  
+  <h1><%= @campaign_ppc.title %><% @campaign_ppc.layout %></h1>
+ 
+
+  <% unless @campaign_ppc.body.blank? %>
+      <div class="blog-body"><%= @campaign_ppc.body.html_safe %></div>
+  <% end %>
+
+  <div class="info">
+    <%= render partial: 'shared/addthis' %>
+  </div>
+    
+  
+<% elsif @campaign_ppc.layout == 4 %>
+
+  <% content_for :header do %>
+    <h2 class='title'><%= @campaign_ppc.title %></h2>
+  <% end %>
+
+  <h1 class="text-center"><%= @campaign_ppc.title %></h1>
+
+  <div style="width:100%;">
+
+    <div class="col-sm-6  col-xs-12 pull-left img-left">
+      <% if @campaign_ppc.image.present? %>
+        <%= image_tag @campaign_ppc.image.url, class: 'img-responsive img-layout' %>
+      <% elsif @campaign_ppc.advertisement_image_link.present? %>
+        <%= image_tag @campaign_ppc.advertisement_image_link, class: 'featured' %>
+      <% end %>
+    </div>  
+
+    <div>
+      <% unless @campaign_ppc.body.blank? %>
+        <div class="blog-body"><%= @campaign_ppc.body.html_safe %></div> 
+      <% end %>
+    </div>
+  </div>
+
+  <br>
+  <div class="info" style="clear:both;">
+    <%= render partial: 'shared/addthis' %>
+  </div>
+
+<% elsif @campaign_ppc.layout == 5 %>
+    
+  <% content_for :header do %>
+    <h2 class='title'><%= @campaign_ppc.title %></h2>
+  <% end %>
+
+  <h1 class="text-center"><%= @campaign_ppc.title %></h1>
+  <div style="width:100%;">
+
+    <div class="col-sm-6  col-xs-12 pull-right img-right">
+      <% if @campaign_ppc.image.present? %>
+          <%= image_tag @campaign_ppc.image.url, class: 'featured' %>
+      <% elsif @campaign_ppc.advertisement_image_link.present? %>
+        <%= image_tag @campaign_ppc.advertisement_image_link, class: 'featured' %>
+      <% end %>
+    </div>  
+
+    <div>
+      <% unless @campaign_ppc.body.blank? %>
+        <div class="blog-body"><%= @campaign_ppc.body.html_safe %></div> 
+      <% end %>
+    </div>
+
+  </div>
+  <br>
+  <div class="info" style="clear:both;">
+    <%= render partial: 'shared/addthis' %>
+  </div> 
+
+<% else %>
+
+  <% if @campaign_ppc.image.present? %>
+    <%= image_tag @campaign_ppc.image.url, class: 'featured'  %>
+  <% elsif @campaign_ppc.advertisement_image_link.present? %>
+    <%= image_tag @campaign_ppc.advertisement_image_link, class: 'featured' %>
+  <% end %>
+
+  <% content_for :header do %>
+      <h2 class='title'><%= @campaign_ppc.title %></h2>
+  <% end %>
+
+  <h1><%= @campaign_ppc.title %></h1>
+
+
+  <% unless @campaign_ppc.body.blank? %>
+      <div class="blog-body"><%= @campaign_ppc.body.html_safe %></div>
+  <% end %>
+
+  <div class="info">
+    <%= render partial: 'shared/addthis' %>
+  </div>   
+
+<% end %>

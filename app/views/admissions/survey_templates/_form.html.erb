@@ -1,0 +1,48 @@
+<%= nested_form_for [:admin, survey_template] do |f| %>
+
+  <%= render 'shared/errors', m: survey_template %>
+
+  <%= render 'admissions/shared/action_buttons',
+             m: survey_template,
+             cancel_path: admin_survey_templates_path,
+            # view_path: survey_template.new_record? ? nil : survey_template_path(survey_template),
+             delete_path: survey_template.new_record? ? nil : confirm_destroy_admin_survey_template_path(survey_template.secure_token) %>
+
+  <p><%= f.label :title %>
+    <%= f.text_field :title, required: true, placeholder: 'survey template title' %> <span class="required">*</span></p>
+
+  <p>
+    <%= f.label :status_id %>
+    <%= select :survey_template, :status_id, Page::STATUSES %></p>
+  </p> 
+
+  <p>
+    <%= f.label :target_user %>
+    <%= select :survey_template, :user_type, [['Registered', 'registered'], ['Unregistered', 'unregistered'], ['Both', 'both']], prompt: "Select Users"  %>&nbsp OR &nbsp
+    <%= f.text_field :identifier, required: true, placeholder: 'Enter an email (Use "/" as seprator for multiple emails)' %>
+  </p>
+
+  
+  <p>
+    <%= f.label :description %>
+    <%= f.text_area :description , placeholder: 'survey template description'%></p>
+
+  <p>
+    <%= f.label :send_date %>
+     <%= f.text_field :send_date, class: 'datepicker', required: true %>
+  </p>
+    
+<% end %>
+
+<% content_for :js do %>
+  <script type="text/javascript">
+    $(function () {
+      var m = parseInt($('#survey_template_send_date_2i option:selected').val());
+      $("#survey_template_send_date_2i > option").each(function() {
+        if(parseInt(this.value) < m){
+          $(this).prop('disabled', true);
+        }
+      });
+    });
+  </script>
+<% end %>

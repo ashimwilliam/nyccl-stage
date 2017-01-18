@@ -1,0 +1,112 @@
+<section id="folder-selector">
+
+  <a href="#" class="cancel close-button" title="Close"><i class="ico-cancel"></i></a>
+
+  <div class="select">
+    <p>
+      Create a new bookmark or <a href="#" class="new">Create a new folder</a>
+    </p>
+    <ul>
+      <% if @blog_post_id.present? %>
+        <%= form_tag sort_blog_post_bookmarks_path, remote: true, id: "bookmarks-form" do |f| %>
+          <div class="indent">
+            <ul class="check-list">
+              <% current_user.folders.ordered.each do |folder| %>
+                <li>
+                  <label class="check bookmark-checks">
+                    <%= check_box_tag "folder_ids[]", folder.id,
+                    current_folders.include?(folder.id) ? true : false,
+                    class: "custom"%>
+                    <%= folder.name %>
+                  </label>
+                </li>
+              <% end %>
+
+              <%= link_to "Remove From All Folders", '#', id: 'uncheck' %>
+            </ul>
+          </div>
+          <a href="#" class="button muted cancel">Cancel</a>&nbsp;
+          <button tag="submit" class="sort-submit" name="save"value="save">Save</button>
+        <% end %>
+      <% elsif @resource_id.present? %>  
+        <%= form_tag sort_resource_bookmarks_path, remote: true, id: "bookmarks-form" do |f| %>
+          <div class="indent">
+            <ul class="check-list">
+              <% current_user.folders.ordered.each do |folder| %>
+                <li>
+                  <label class="check bookmark-checks">
+                    <%= check_box_tag "folder_ids[]", folder.id,
+                    current_folders.include?(folder.id) ? true : false,
+                    class: "custom"%>
+                    <%= folder.name %>
+                  </label>
+                </li>
+              <% end %>
+
+              <%= link_to "Remove From All Folders", '#', id: 'uncheck' %>
+            </ul>
+          </div>
+          <a href="#" class="button muted cancel">Cancel</a>&nbsp;
+          <button tag="submit" class="sort-submit" name="save"value="save">Save</button>
+        <% end %>
+      <% elsif @event_id.present?   %>
+        <%= form_tag sort_event_bookmarks_path, remote: true, id: "bookmarks-form" do |f| %>
+          <div class="indent">
+            <ul class="check-list">
+              <% current_user.folders.ordered.each do |folder| %>
+                <li>
+                  <label class="check bookmark-checks">
+                    <%= check_box_tag "folder_ids[]", folder.id,
+                    current_folders.include?(folder.id) ? true : false,
+                    class: "custom"%>
+                    <%= folder.name %>
+                  </label>
+                </li>
+              <% end %>
+
+              <%= link_to "Remove From All Folders", '#', id: 'uncheck' %>
+            </ul>
+          </div>
+          <a href="#" class="button muted cancel">Cancel</a>&nbsp;
+          <button tag="submit" class="sort-submit" name="save"value="save">Save</button>
+        <% end %>
+
+      <% end %>
+    </ul>
+
+  </div>
+
+  <div class="new-folder">
+    <p>
+      Name your new folder
+    </p>
+    <% if @blog_post_id.present? %>
+      <%= form_tag blog_post_bookmarks_path, remote: true, id: 'new-folder-for-bookmarks' do %>
+        <%= text_field_tag 'folder_name', nil, placeholder:"folder name" %>
+        <a href="#" class="button muted cancel">Cancel</a>&nbsp
+        <button tag="submit" class="sort-submit" class="button create">Create folder</button>
+      <% end %>
+    <% elsif @resource_id.present? %>
+      <%= form_tag resource_bookmarks_path, remote: true, id: 'new-folder-for-bookmarks' do %>
+        <%= text_field_tag 'folder_name', nil, placeholder:"folder name" %>
+        <a href="#" class="button muted cancel">Cancel</a>&nbsp
+        <button tag="submit" class="sort-submit" class="button create">Create folder</button>
+      <% end %>
+    <% elsif @event_id.present? %>
+      <%= form_tag event_bookmarks_path, remote: true, id: 'new-folder-for-bookmarks' do %>
+        <%= text_field_tag 'folder_name', nil, placeholder:"folder name" %>
+        <a href="#" class="button muted cancel">Cancel</a>&nbsp
+        <button tag="submit" class="sort-submit" class="button create">Create folder</button>
+      <% end %>
+    <% end %>  
+  </div>
+
+  <div class="success">
+    <p>
+      Folders updated!
+    </p>
+    <a href="#" class="button cancel">OK!</a>
+  </div>
+
+  <div class="errors"></div>
+</section>

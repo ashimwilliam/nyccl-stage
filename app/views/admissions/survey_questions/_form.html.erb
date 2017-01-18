@@ -1,0 +1,42 @@
+<%= nested_form_for [:admin, survey_question] do |f| %>
+
+  <%= render 'shared/errors', m: survey_question %>
+
+  <%= render 'admissions/shared/action_buttons',
+    m: survey_question,
+    cancel_path: admin_survey_questions_path,
+    # view_path: survey_question.new_record? ? nil : survey_question_path(survey_question),
+    delete_path: survey_question.new_record? ? nil : confirm_destroy_admin_survey_question_path(survey_question) %>
+
+  <p><%= f.label :question_title %>
+    <%= f.text_field :question_title, required: true %> <span class="required">*</span></p> 
+  
+  <p>
+    <%= f.label :any_help %>
+    <%= f.text_field :ques_help %></p>
+
+  <p>
+    <%= f.label :required %>
+    <%= f.check_box :required %>
+  </p>   
+  
+  <p>
+    <%= f.label :question_type %>
+    <%= f.select :question_type, SurveyQuestion::QUESTION_TYPES, :prompt => 'Select Your Question Type', id: 'ques_type', required: true %></p>
+  </p>
+
+
+  <div class="phase-fields">
+    <label>Options</label>
+    
+    <ul id="ques-list" class="nested-list">
+      <%= f.fields_for :survey_options, wrapper_tag: 'li' %>
+    </ul>
+
+    <p class="indent" data-target="#faqs-list" id="ques_add">
+      
+      <%= f.link_to_add "Add an Option", :survey_options, class: 'button small' %>
+    </p>
+    <hr/>
+  </div>
+<% end %>

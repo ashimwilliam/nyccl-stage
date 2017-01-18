@@ -1,0 +1,88 @@
+<% title "Survey Template" %>
+
+<div class="controls">
+  
+</div>
+
+<div class="pagination-info">
+  <%= page_entries_info @user_templates %>
+</div>
+
+
+<div style="margin-top: 39px">
+  <%= render 'shared/per_page'%>
+</div>
+
+<%= will_paginate @user_templates, previous_label: '&lt; previous',
+  next_label: 'next &gt;' %>
+
+<label for="status_id">Status:</label> <%= select_tag :status_id, options_for_select([['Accessed', 'accessed'], ["Unaccessed", 'unaccessed']], @status_id), prompt: "Show all" %><br>
+
+<%= link_to 'Back to main page', admin_survey_reports_path, class: (admin_on_class admin_survey_reports_path) %>
+
+<% if !@user_templates.blank? %>
+  <h2><%= @user_templates.last.survey_template.title  %> </h2>
+  <table class="index-list">
+    <tr>
+      <th>User</th>
+      <th>Status</th>
+      <th>Send Date</th>
+    </tr>
+    <% @user_templates.each do |survey| %>
+      <tr<%= cycle(""," class='alt'") %>>
+        <% if  survey[:user_id].present? %>
+          <% user = User.find(survey.user_id) %>
+          <td><%= link_to user.full_name  %></td>
+        <% else %>
+           <% user = GuestUser.find(survey.guest_user_id) %>
+                     <td><%= link_to user.email  %></td>
+
+        <% end %>
+          <td><%= survey.accessed? ? "Accessed" : "Unaccessed"%></td>
+        <% template = SurveyTemplate.find(survey.survey_template_id) %>
+          <td><%= survey.created_at.strftime("%Y-%m-%d") %></td>
+        <td>
+          <span class="actions">
+            <%= link_to 'show', admin_survey_report_path(survey) %>&nbsp;&nbsp; |
+            <%= link_to 'delete',  confirm_destroy_admin_survey_report_path(survey.email_secure_token) %> 
+          <span>
+        </td> 
+      </tr>
+    <% end %>
+  </table>
+<% end %>  
+
+<%= content_for :js do %>
+  <script>
+    (function () {
+        var app = {},
+            status = 'status_id',
+            type = 'type_id';
+        function init() {
+            $('#' + status).change(onFilterChange);
+            $('#' + type).change(onFilterChange);
+        }
+        function onFilterChange(e) {
+            var pairs = window.location.search.split('?').join('').split('&'),
+                keys = {},
+                pair;
+            for (var i = 0; i < pairs.length; ++i) {
+                pair = pairs[i].split('=');
+                keys[pair[0]] = pair[1];
+            }
+            keys[status] = $('#' + status).val();
+            keys[type] = $('#' + type).val();
+            window.location = window.location.pathname + '?' + serialize(keys);
+        }
+        function serialize(obj) {
+            var str = [];
+            for(var p in obj) {
+                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+            }
+            return str.join("&");
+        }
+        $(init);
+        return app;
+    }());
+  </script>
+<% end %>

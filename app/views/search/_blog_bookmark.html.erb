@@ -1,0 +1,6 @@
+<% bookmarked = bookmarked?(record.id) %>
+<% if record.class == BlogPost %>
+  <a href="<%= toggle_blog_post_bookmarks_path(record.id) %>" class="icon bookmark bookmark-<%= record.id %> tip <%= "on"  if  bookmarked %>" data-remote="true" data-tip-class="bookmark" data-original-title="">Bookmark</a>
+<% elsif record.class == Event %>
+  <a href="<%= toggle_event_bookmarks_path(record.id) %>" class="icon bookmark bookmark-<%= record.id %> tip <%= "on"  if  bookmarked %>" data-remote="true" data-tip-class="bookmark" data-original-title="">Bookmark</a>
+<% end %>

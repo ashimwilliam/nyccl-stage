@@ -1,0 +1,9 @@
+<div class="form-group col-sm-6 col-xs-12">
+  <span class="hint">If your organization is not in the drop down add it here.</span>
+  <label for="norg">NEW ORGANIZATION NAME</label>
+  <%= f.text_field :name, class: 'form-control', id: "norg" %>
+</div>
+<div class="form-group col-sm-6 col-xs-12"">
+  <label for="norgtyp">New organization type</label>
+  <%= select :organization, :type_id, Organization::TYPES, {}, class: 'form-control', id: "norgtyp" %> 
+</div>

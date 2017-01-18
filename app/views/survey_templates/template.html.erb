@@ -1,0 +1,114 @@
+<% title @survey_template.title %>
+<style type="text/css">
+  label.radio-inline, label.checkbox-inline {
+    cursor: pointer;
+    font-weight: 400;
+    margin-bottom: 4px !important;
+    margin-right: 2%;
+    margin-left:0;
+    
+    position: relative;
+    vertical-align: middle;
+  }
+  label.radio-inline.checked, label.checkbox-inline.checked {
+    background-color: #266c8e;
+    color: #fff !important;
+    text-shadow: 1px 1px 2px #000 !important;
+  }
+  .checkbox-inline + .checkbox-inline, .radio-inline + .radio-inline {
+    margin-left: 0;
+  }
+  .columns label.radio-inline, .columns label.checkbox-inline {
+    min-width: 190px;
+    vertical-align: top;
+    width: 30%;
+  }
+</style>
+<div class="container" id="surveyform">
+  <div class="row">
+    <div class="col-xs-12 col-md-offset-1 col-md-8">
+      <legend class="text-center" style="border-bottom:none;"><%= @survey_template.title %></legend>
+      <% unless @survey_template.description.blank? %>
+        <p><%= @survey_template.description.html_safe %></p>
+      <% end %>
+
+      <%= form_for :survey_template_answer, url: survey_answer_survey_template_path,  class: "newform" do |f| %>
+       
+        <%= hidden_field_tag :survey_template_id, @survey_template.id %>
+        <%= hidden_field_tag :user_id, @user_survey_template.user_id if @user_survey_template.present? %>
+        <%= hidden_field_tag :user_survey_template_id, @user_survey_template.id if @user_survey_template.present? %>
+
+        
+          <%= f.fields_for :survey_answers do |ff| %>
+            <% @survey_template.survey_questions.each_with_index do |question, ind| %>
+              <div class= "form-group">
+                <label>Question  <%= ind+1 %><%= "*" if question.required? %>.&nbsp&nbsp<%= question.question_title %>
+                  <% if question.ques_help.present? %>
+                     <a href="javascript:void(0);"><span class="glyphicon glyphicon-info-sign srvyhelp" title= "<%= question.ques_help %>"></span></a>
+                  <% end %> 
+                </label>  
+                <% ques_type = question.question_type %>
+             
+                <% case ques_type %>
+                <% when 1 %>
+                  <div class="radio">
+                    <% if question.required? %>
+                  
+                      <label><input type="radio" name="[survey][<%=question.id%>]" value="true" checked = "checked"> True </label>
+                      <label><input type="radio" name="[survey][<%=question.id%>]" value="false"> False</label>
+                    <% else %>
+                      <label><input type="radio" name="[survey][<%=question.id%>]" value="true"> True </label>
+                      <label><input type="radio" name="[survey][<%=question.id%>]" value="false"> False</label>
+                    <% end %>
+                  </div>
+                <% when 2 %>
+                  <div class="radio">
+                    <% if question.required? %>
+                      <% question.survey_options.each do |option| %>
+                         <label class="radio-inline"><input type="radio" name="[survey][<%=question.id%>]" value="<%= option.option_title %>" required><%= option.option_title %> </label>
+                      <% end %>
+                    <% else %>
+                      <% question.survey_options.each do |option| %>
+                         <label class="radio-inline"><input type="radio" name="[survey][<%=question.id%>]" value="<%= option.option_title %>" ><%= option.option_title %> </label>
+                      <% end %>
+                    <% end %> 
+                  </div> 
+                <% when 3 %>
+                  <% if question.required? %>
+                    <div class="check">
+                      <div class='check1'>
+                        <% question.survey_options.each do |option| %>
+                          <label class="checkbox-inline"><input type="checkbox" name="[survey][<%=question.id%>][<%= option.id %>]" value="<%= option.option_title%>" class= "chk-required"><%= option.option_title %></label>
+                        <% end %>
+                      </div>  
+                    </div>
+                  <% else %>
+                    <div class="check">
+                      <% question.survey_options.each do |option| %> 
+                        <label class="checkbox-inline"><input type="checkbox" name="[survey][<%=question.id%>][<%= option.id %>]" value="<%= option.option_title%>"><%= option.option_title %></label>
+                      <% end %>             
+                    </div>
+                  <% end %>  
+ <!--                <%# when 4 %>
+                  <%# if question.required? %>
+                    <input type="text" name="[survey][<%=question.id%>]"  class="form-control" required>
+                  <%# else %>
+                    <input type="text" name="[survey][<%=question.id%>]"  class="form-control" >
+                  <%# end %>  -->
+                <% when 4 %>
+                  <% if question.required? %>
+                    <textarea  rows="4" name="[survey][<%=question.id%>]"  class="form-control" required></textarea> 
+                  <% else %>
+                    <textarea rows="4" name="[survey][<%=question.id%>]" class="form-control" ></textarea> 
+                  <% end %>   
+                <% end %>
+              </div>   
+            <% end %>     
+          <% end %>
+          <div class="form-group">
+            <input class="btn btn-success" name="commit" type="submit" value="submit" />
+          </div>
+      <% end %>   
+    </div>
+  </div>
+</div> 
